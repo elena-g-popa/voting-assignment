@@ -1,0 +1,138 @@
+@import "css-reset.css";
+
+html {
+  font-family: sans-serif;
+}
+
+.header {
+  margin: 0 auto;
+  text-align: center;
+  padding: 10px;
+  font-size: 2rem;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.container .container-column {
+  width: 33%;
+  padding: 10px;
+  border-width: thin;
+  border-color: grey;
+  border-style: solid;
+  box-sizing: border-box;
+}
+
+h2, .container .container-column .question {
+  font-size: 1.2rem;
+  padding-bottom: 10px;
+}
+
+.error-message {
+  color: red;
+}
+
+.container .container-column .question {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type=text] {
+  display: block;
+  margin: 10px 0;
+  padding: 6px;
+  background-color: aliceblue;
+  border-radius: 4px;
+}
+
+button, input[type=button] {
+  float: right
+}
+
+.container .container-column ul li {
+  padding: 6px;
+  border-width: thin;
+  border-color: grey;
+  border-style: solid;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.container .container-column ul li span {
+  padding: 0 6px;
+  border-width: thin;
+  border-color: grey;
+  border-style: solid;
+  font-weight: bolder;
+  background-color: lightpink;
+  color: dimgrey;
+  border-radius: 4px;
+  float: right
+}
+
+.container .container-column .answer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px 0 50px;
+}
+
+.container .container-column .answer div:first-of-type {
+  width: 80%;
+}
+
+.container .container-column .answer div:first-of-type input {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container .container-column .answer div:nth-of-type(2) {
+  width: 19%;
+}
+
+.container .container-column .answer div:nth-of-type(2) button {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  background-color: darkseagreen;
+  border-radius: 4px;
+}
+
+.reset {
+  float: right;
+  padding: 6px;
+  box-sizing: border-box;
+  background-color: lightgoldenrodyellow;
+  border-radius: 4px;
+}
+
+.container .container-column .answer-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.container .container-column .answer-list label {
+  padding-bottom: 10px;
+}
+
+.vote {
+  float: right;
+  padding: 6px;
+  box-sizing: border-box;
+  background-color: darkseagreen;
+  border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1000px) {
+  .container .container-column {
+    width: 100%;
+  }
+}
+
+/* You can add global styles to this file, and also import other style files */

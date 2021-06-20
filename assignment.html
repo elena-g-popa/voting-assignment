@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html  ng-app="answerList">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+
+  <link rel="stylesheet" href="css-reset.css">
+  <link rel="stylesheet" href="styles.css">
+
+<head>
+  <title>Voting Poll</title>
+</head>
+
+
+<script>
+
+  //functions handling the question, adding/removing the answers and setting the stat bars height
+  var app = angular.module("answerList", ['chart.js']);
+  app.controller("myCtrl", function($scope) {
+    $scope.answers = ["A", "B"];
+
+    //default values
+    $scope.answersDefault = ["A", "B"];
+    $scope.uniqueAnswers = 2;
+
+    //adding a new answer to the answers array
+    $scope.addAnswer = function() {
+      $scope.errortext = "";
+      if (!$scope.addMe) {
+        return;
+      }
+
+      //check that user cannot add more than 10 answers
+      if($scope.answers.length < 10){
+        //check for the uniqueness of the answer
+        if ($scope.answers.indexOf($scope.addMe) == -1) {
+          $scope.answers.push($scope.addMe);
+          $scope.uniqueAnswers +=1;
+        } else {
+          $scope.errortext = "The answer already exists";
+        }
+      } else {
+        $scope.errortext = "You have reached the maximum of possible answers";
+      }
+
+      //call to the create bar chart function to pass the updated answer array
+      $scope.createBars();
+    }
+
+    //removing an answers
+    $scope.removeAnswer = function(x) {
+      //check for a minimum of 2 answers
+      if($scope.answers.length > 2){
+          $scope.errortext = "";
+          $scope.answers.splice(x, 1);
+        }
+        else {
+          $scope.errortext = "The minimum required answers is 2";
+        }
+
+    }
+
+    $scope.totalNumberOfAnswers = 0;
+    $scope.repeatedAnswers = [];
+
+    //check user answers and update bar stats
+    $scope.checkoptions = function (choice) {
+
+      //check for at least once answerl; update total answers value and store all user answers
+      if ($scope.selectedAnswer!=undefined){
+          $scope.totalNumberOfAnswers +=1;
+          $scope.repeatedAnswers.push($scope.selectedAnswer);
+        }
+      else
+        $scope.msg = 'Please select one option';
+
+      //call to the create bar chart function to pass the array storing all user answers
+      $scope.createBars();
+
+      };
+
+    //create the bar chart function
+    $scope.createBars = function () {
+      //check array of all stored answers and remove all duplicates;
+      $scope.repeatedAnswers = [].concat.apply([],$scope.repeatedAnswers);
+      $scope.sameAnswer = $scope.repeatedAnswers.filter((answer, i, ar) => ar.indexOf(answer) === i);
+
+      //set the correct index of the sameAnswerarray to those of the answers array to correctly update the heights of the bars
+      $scope.sameAnswer = $scope.answers;
+
+      //all heights of possible answers
+      $scope.heightOne = 0;
+      $scope.heightTwo = 0;
+      $scope.heightThree = 0;
+      $scope.heightFour = 0;
+      $scope.heightFive = 0;
+      $scope.heightSix = 0;
+      $scope.heightSeven = 0;
+      $scope.heightEight = 0;
+      $scope.heightNine = 0;
+      $scope.heightTen = 0;
+
+      //check if the selected answer is in the repeatedAnswers array and increase that answers bar count with one
+      for(var i = 0; i < $scope.repeatedAnswers.length; i++)
+      {
+        $scope.answer = $scope.repeatedAnswers[i];
+
+        if($scope.answer.includes($scope.sameAnswer[0])){
+          $scope.heightOne +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[1])){
+          $scope.heightTwo +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[2])){
+          $scope.heightThree +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[3])){
+          $scope.heightFour +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[4])){
+          $scope.heightFive +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[5])){
+          $scope.heightSix +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[6])){
+          $scope.heightSeven +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[7])){
+          $scope.heightEight +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[8])){
+          $scope.heightNine +=1;
+        }
+
+        if($scope.answer.includes($scope.sameAnswer[9])){
+          $scope.heightTen +=1;
+        }
+      }
+
+      //create bar chart for selected answers
+      $scope.labels = $scope.answers;
+      $scope.data = [
+          [$scope.heightOne, $scope.heightTwo, $scope.heightThree, $scope.heightFour, $scope.heightFive, $scope.heightSix, $scope.heightSeven, $scope.heightEight, $scope.heightNine, $scope.heightTen]
+       ];
+
+       $scope.options = {
+          scales: {
+             yAxes: [{
+                ticks: {
+                   beginAtZero: true
+                }
+             }]
+          }
+       }
+      //end chart
+      }
+
+
+    //reset the question and answers
+    $scope.reset = function() {
+        $scope.answers = angular.copy($scope.answersDefault);
+        $scope.totalNumberOfAnswers = 0;
+        $scope.uniqueAnswers = 2;
+        $scope.repeatedAnswers = [];
+
+        $scope.heightOne = 0;
+        $scope.heightTwo = 0;
+        $scope.heightThree = 0;
+        $scope.heightFour = 0;
+        $scope.heightFive = 0;
+        $scope.heightSix = 0;
+        $scope.heightSeven = 0;
+        $scope.heightEight = 0;
+        $scope.heightNine = 0;
+        $scope.heightTen = 0;
+
+        $scope.createBars();
+    };
+    $scope.reset();
+  });
+
+
+
+</script>
+
+<body>
+  <div class="header">
+    <h1>Sir vote-a-lot</h1>
+  </div>
+  <div class="container"  ng-cloak ng-controller="myCtrl">
+    <!-- add question and possible answers section-->
+    <div class="container-column">
+
+      <div class="question" ng-init="question='What is your question?'">
+        <label for="question" > Question </label>
+        <input type="text" id="question" name="question" ng-model="question" maxlength="80">
+      </div>
+
+      <div style="max-width:400px;">
+        <ul>
+          <li ng-repeat="x in answers">{{x}}<span ng-click="removeAnswer($index)" style="cursor:pointer;">×</span></li>
+        </ul>
+        <div>
+          <div class="answer">
+            <div>
+              <input placeholder="Your answer" ng-model="addMe" maxlength="80" type="text">
+            </div>
+            <div>
+              <button ng-click="addAnswer()" >Add</button>
+            </div>
+          </div>
+          <p class="error-message">{{errortext}}</p>
+        </div>
+      </div>
+
+      <button ng-click="reset()" class="reset">Reset</button>
+
+    </div>
+
+    <!-- user selected answers section-->
+    <div class="container-column">
+        <h2>{{question}}</h2>
+
+        <div class="answer-list">
+          <label ng-repeat="answer in answers">
+            <input type="radio" name="answerChoices" ng-model="$parent.selectedAnswer" value="{{answer}}" />{{answer}}
+          </label>
+      </div>
+        <input class="vote" type="button" id="btnClick" value="Vote" ng-click="checkoptions(answers)" />
+        <p class="error-message">{{msg}}</p>
+
+    </div>
+
+    <!-- display bar chart section -->
+    <div class="container-column">
+      <h2>{{question}}</h2>
+
+      <div>
+          <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-options="options"></canvas>
+      </div>
+
+      <p>Total votes:{{totalNumberOfAnswers}}</p>
+    </div>
+  </div>
+</body>
+
+</html>
